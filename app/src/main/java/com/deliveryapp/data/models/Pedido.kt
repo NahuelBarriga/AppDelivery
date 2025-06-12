@@ -4,8 +4,10 @@ data class Pedido(
     val id: Int,
     val nombreCliente: String,
     val listaItems: List<Item>,
-    val estado: String,
-    val total: Double
+    var estado: String,
+    val total: Double,
+    val direccion: String,
+    var expandido: Boolean = false
 )
 
 data class Item(
