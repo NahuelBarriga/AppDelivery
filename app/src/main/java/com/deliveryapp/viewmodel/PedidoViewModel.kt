@@ -26,20 +26,19 @@ class PedidoViewModel(private val repo: PedidoRepository) : ViewModel() {
             }
         }
     }
-
-    fun cambiarEstadoPedido(idPedido: Int, nuevoEstado: String) {
-        viewModelScope.launch {
-            try {
-                val exito = repo.actualizarEstadoPedidoApi(idPedido, nuevoEstado)
-                if (exito) {
-                    // Opcional: recargar lista o actualizar localmente
-                    cargarPedidos()
-                } else {
-                    _error.postValue("Error al actualizar estado")
-                }
-            } catch (e: Exception) {
-                _error.postValue("Falló la petición: ${e.message}")
-            }
-        }
-    }
+//    fun cambiarEstadoPedido(idPedido: Int, nuevoEstado: String) {
+//        viewModelScope.launch {
+//            try {
+//                val exito = repo.actualizarEstadoPedidoApi(idPedido, nuevoEstado)
+//                if (exito) {
+//                    // Opcional: recargar lista o actualizar localmente
+//                    cargarPedidos()
+//                } else {
+//                    _error.postValue("Error al actualizar estado")
+//                }
+//            } catch (e: Exception) {
+//                _error.postValue("Falló la petición: ${e.message}")
+//            }
+//        }
+//    }
 }
