@@ -34,9 +34,9 @@ class PedidoRepository {
 
     // Simula una lista de pedidos de prueba
     private val pedidosDePrueba = listOf(
-        Pedido(id = 1, nombreCliente = "Nahuel", estado = "PENDIENTE", listaItems = emptyList(), total = 500.0, direccion = "Avellaneda 2112"),
-        Pedido(id = 2, nombreCliente = "Lucía", estado = "EN PREPARACIÓN", listaItems = emptyList(), total = 500.0, direccion = "Independencia 2233"),
-        Pedido(id = 3, nombreCliente = "Juan", estado = "ENTREGADO", listaItems = emptyList(), total = 500.0, direccion = "Libertad 1550")
+        Pedido(id = 1, nombreCliente = "Nahuel", estado = "ENTREGADO", listaItems = emptyList(), total = 500.0, direccion = "Avellaneda 2112"),
+        Pedido(id = 2, nombreCliente = "Lucía", estado = "PENDIENTE ENVIO", listaItems = emptyList(), total = 500.0, direccion = "Independencia 2233"),
+        Pedido(id = 3, nombreCliente = "Juan", estado = "ENVIADO", listaItems = emptyList(), total = 500.0, direccion = "Libertad 1550")
     )
 
     suspend fun obtenerPedidosDesdeApi(): List<Pedido> {
