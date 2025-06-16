@@ -58,7 +58,7 @@ dependencies {
     implementation(libs.androidx.cardview)
     implementation(libs.material.v190)
 
-
+    implementation ("androidx.fragment:fragment-ktx:1.3.6")
 
 
 
