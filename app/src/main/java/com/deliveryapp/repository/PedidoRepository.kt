@@ -1,19 +1,37 @@
-/*package com.deliveryapp.repository
+package com.deliveryapp.repository
 
+import androidx.annotation.OptIn
+import androidx.media3.common.util.Log
+import androidx.media3.common.util.UnstableApi
 import com.deliveryapp.data.api.RetrofitClient
 import com.deliveryapp.data.models.Pedido
 
+@UnstableApi
 class PedidoRepository {
 
     private val api = RetrofitClient.apiService
 
     // Devuelve la lista de pedidos o lanza excepción si algo falla
+    @OptIn(UnstableApi::class)
     suspend fun obtenerPedidosDesdeApi(): List<Pedido> {
-        val response = api.obtenerPedidos()
-        if (response.isSuccessful) {
-            return response.body() ?: emptyList()
-        } else {
-            throw Exception("Error ${response.code()}: ${response.message()}")
+        Log.w("Pedidos", "llegue")
+        try {
+            val response = api.obtenerPedidos()
+            if (response.isSuccessful) {
+                Log.w("Pedidos", "llegue2")
+                Log.w("Pedidos", "OK: ${response.body()}")
+                return response.body() ?: emptyList()
+            } else {
+                Log.w("Pedidos", "me fui")
+                Log.w(
+                    "Pedidos",
+                    "Error HTTP: ${response.code()} - ${response.errorBody()?.string()}"
+                )
+                throw Exception("Error ${response.code()}: ${response.message()}")
+            }
+        } catch (e: Exception) {
+            Log.w("Pedidos", "${e.localizedMessage}")
+            throw Exception("Error")
         }
     }
 
@@ -23,31 +41,7 @@ class PedidoRepository {
         val response = api.actualizarPedido(idPedido, body)
         return response.isSuccessful
     }
-}*/
-
-
-package com.deliveryapp.repository
-
-import com.deliveryapp.data.models.Pedido
-
-class PedidoRepository {
-
-    // Simula una lista de pedidos de prueba
-    private val pedidosDePrueba = listOf(
-        Pedido(id = 1, nombreCliente = "Nahuel", estado = "ENTREGADO", listaItems = emptyList(), total = 500.0, direccion = "Avellaneda 2112"),
-        Pedido(id = 2, nombreCliente = "Lucía", estado = "PENDIENTE ENVIO", listaItems = emptyList(), total = 500.0, direccion = "Independencia 2233"),
-        Pedido(id = 3, nombreCliente = "Juan", estado = "ENVIADO", listaItems = emptyList(), total = 500.0, direccion = "Libertad 1550")
-    )
-
-    suspend fun obtenerPedidosDesdeApi(): List<Pedido> {
-        // Simula un pequeño retraso como si viniera de la red
-        kotlinx.coroutines.delay(500)
-        return pedidosDePrueba
-    }
-
-    suspend fun actualizarEstadoPedidoApi(idPedido: Int, nuevoEstado: String): Boolean {
-        // Simula la actualización localmente
-        println("Mock: Se actualiza el pedido $idPedido a estado '$nuevoEstado'")
-        return true
-    }
 }
+
+
+

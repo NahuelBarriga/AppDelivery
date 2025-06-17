@@ -172,47 +172,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Total del pedido -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingHorizontal="16dp"
-                android:paddingBottom="16dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_money"
-                    android:layout_marginEnd="8dp"
-                    app:tint="#4CAF50" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Total del pedido"
-                        android:textSize="12sp"
-                        android:textColor="#757575"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvTotal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:textColor="#1B5E20"
-                        android:textStyle="bold"
-                        android:layout_marginTop="2dp"
-                        tools:text="$2.450" />
-                </LinearLayout>
-            </LinearLayout>
 
             <!-- Botones de acción -->
             <LinearLayout

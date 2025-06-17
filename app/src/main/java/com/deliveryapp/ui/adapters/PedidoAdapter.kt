@@ -5,10 +5,13 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.OptIn
 import androidx.appcompat.app.AlertDialog
+import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.RecyclerView
 import com.deliveryapp.data.models.Pedido
 import com.deliveryapp.databinding.ItemPedidoBinding
+import com.deliveryapp.repository.PedidoRepository
 
 class PedidoAdapter(private var pedidos: List<Pedido>) : RecyclerView.Adapter<PedidoAdapter.PedidoViewHolder>() {
 
@@ -16,10 +19,9 @@ class PedidoAdapter(private var pedidos: List<Pedido>) : RecyclerView.Adapter<Pe
 
         fun bind(pedido: Pedido, position: Int) {
             // Configurar datos básicos
-            binding.tvCliente.text = pedido.nombreCliente
+            binding.tvCliente.text = pedido.cliente.nombre
             binding.tvId.text = pedido.id.toString()
-            binding.tvDireccion.text = pedido.direccion
-            binding.tvTotal.text = "$${pedido.total}"
+            binding.tvDireccion.text = pedido.cliente.direccion
 
             // Configurar estado visual
             configurarEstadoPedido(pedido)
@@ -35,8 +37,8 @@ class PedidoAdapter(private var pedidos: List<Pedido>) : RecyclerView.Adapter<Pe
             val estado = pedido.estado.lowercase()
 
             when (estado) {
-                "pendiente envio" -> {
-                    binding.tvEstado.text = "PENDIENTE ENVÍO"
+                "listo para enviar" -> {
+                    binding.tvEstado.text = "listo para enviar"
                     binding.tvEstado.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF9800"))
                     binding.statusIndicator.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF9800"))
                 }
@@ -84,8 +86,11 @@ class PedidoAdapter(private var pedidos: List<Pedido>) : RecyclerView.Adapter<Pe
             }
         }
 
-        private fun configurarBotones(pedido: Pedido, position: Int) {
+        @OptIn(UnstableApi::class)
+        private suspend fun configurarBotones(pedido: Pedido, position: Int) {
+
             val estado = pedido.estado.lowercase()
+
 
             // Ocultar todos los botones primero
             binding.btnAsignarse.visibility = View.GONE
@@ -93,16 +98,17 @@ class PedidoAdapter(private var pedidos: List<Pedido>) : RecyclerView.Adapter<Pe
             binding.btnCancelado.visibility = View.GONE
 
             when (estado) {
-                "pendiente envio" -> {
+                "listo para enviar" -> {
                     // Solo mostrar botón asignarse
                     binding.btnAsignarse.visibility = View.VISIBLE
                     binding.btnAsignarse.setOnClickListener {
-                        pedido.estado = "enviado"
+                        pedido.estado = "en camino"
                         notifyItemChanged(position)
+
                         // TODO: hacer PATCH al servidor
                     }
                 }
-                "enviado" -> {
+                "en camino" -> {
                     // Mostrar botones entregado y cancelado
                     binding.btnEntregado.visibility = View.VISIBLE
                     binding.btnCancelado.visibility = View.VISIBLE
@@ -135,6 +141,12 @@ class PedidoAdapter(private var pedidos: List<Pedido>) : RecyclerView.Adapter<Pe
                 .setNegativeButton("No", null)
                 .show()
         }
+    }
+
+    @OptIn(UnstableApi::class)
+    fun updateEstado(id: Int, estado: String): Boolean {
+        val repo = PedidoRepository()
+        return repo.actualizarEstadoPedidoApi(id, "en camino")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PedidoViewHolder {

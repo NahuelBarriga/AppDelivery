@@ -31,8 +31,6 @@ class LoginViewModel : ViewModel() { // Si usas un Repository, lo inyectarías a
         viewModelScope.launch {
             _loginResult.value = LoginResult.Loading // Indicar que está cargando
 
-            // Simular una pequeña demora como si fuera una llamada de red
-            delay(1500)
 
             val user = validUsers.find { it.username == username }
 
