@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.annotation.OptIn
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
 import com.deliveryapp.databinding.DialogLoginBinding
 import com.deliveryapp.data.api.RetrofitClient
@@ -81,6 +82,7 @@ class LoginDialogFragment : DialogFragment() {
         }
     }
 
+    @OptIn(UnstableApi::class)
     private fun setupListeners() {
         binding.buttonLoginDialog.setOnClickListener {
             val username = binding.editTextUsernameDialog.text.toString().trim()
