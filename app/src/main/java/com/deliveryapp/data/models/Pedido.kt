@@ -24,3 +24,8 @@ data class Cliente(
     val ciudad: String,
     val telefono: String,
 )
+
+data class PedidoRequest(
+    val estado: String,
+    val usuarioId: Int
+)

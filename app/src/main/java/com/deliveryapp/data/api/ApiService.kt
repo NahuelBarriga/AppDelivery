@@ -1,9 +1,8 @@
 package com.deliveryapp.data.api
 
-import android.credentials.Credential
 import com.deliveryapp.data.models.Pedido
+import com.deliveryapp.data.models.PedidoRequest
 import com.deliveryapp.data.models.Usuario
-import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -18,7 +17,7 @@ interface ApiService {
     @PATCH("pedidos/delivery/{id}")
     suspend fun actualizarPedido(
         @Path("id") idPedido: Int,
-        @Body body: Map<String, String>  // o un DTO específico para actualizar estado
+        @Body body: PedidoRequest  // o un DTO específico para actualizar estado
     ): Response<Unit>
 
     @POST("auth/login")

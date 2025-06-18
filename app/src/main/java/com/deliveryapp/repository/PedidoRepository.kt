@@ -5,6 +5,7 @@ import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
 import com.deliveryapp.data.api.RetrofitClient
 import com.deliveryapp.data.models.Pedido
+import com.deliveryapp.data.models.PedidoRequest
 
 @UnstableApi
 class PedidoRepository {
@@ -38,7 +39,7 @@ class PedidoRepository {
     suspend fun actualizarEstadoPedidoApi(idPedido: Int, nuevoEstado: String): Boolean {
         // Suponemos que el back espera un JSON { "estado": "ENTREGADO" }
         Log.w("Prueba", "pedidorepository llega")
-        val body = mapOf("estado" to nuevoEstado)
+        val body = PedidoRequest(estado = nuevoEstado, usuarioId = 1)
         val response = api.actualizarPedido(idPedido, body)
         return response.isSuccessful
     }
