@@ -4,10 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.util.Log
 import com.deliveryapp.data.models.Pedido
 import com.deliveryapp.repository.PedidoRepository
 import kotlinx.coroutines.launch
 
+@androidx.media3.common.util.UnstableApi
 class PedidoViewModel(private val repo: PedidoRepository) : ViewModel() {
 
     private val _pedidos = MutableLiveData<List<Pedido>>()
@@ -26,6 +28,21 @@ class PedidoViewModel(private val repo: PedidoRepository) : ViewModel() {
             }
         }
     }
+
+    fun actualizarEstadoPedido(idPedido: Int, nuevoEstado: String, onResultado: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            try {
+                Log.w("Prueba", "pedidoviewmodel llega")
+                val exito = repo.actualizarEstadoPedidoApi(idPedido, nuevoEstado)
+                onResultado(exito)
+            } catch (e: Exception) {
+                Log.w("Prueba", "pedidoviewmodel NO llega")
+                onResultado(false)
+            }
+        }
+    }
+}
+
 //    fun cambiarEstadoPedido(idPedido: Int, nuevoEstado: String) {
 //        viewModelScope.launch {
 //            try {
@@ -41,4 +58,3 @@ class PedidoViewModel(private val repo: PedidoRepository) : ViewModel() {
 //            }
 //        }
 //    }
-}

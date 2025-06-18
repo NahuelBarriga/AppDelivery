@@ -12,7 +12,7 @@ interface ApiService {
     @GET("pedidos/delivery")
     suspend fun obtenerPedidos(): Response<List<Pedido>>
 
-    @PATCH("pedidos/{id}")
+    @PATCH("pedidos/delivery/{id}")
     suspend fun actualizarPedido(
         @Path("id") idPedido: Int,
         @Body body: Map<String, String>  // o un DTO específico para actualizar estado
