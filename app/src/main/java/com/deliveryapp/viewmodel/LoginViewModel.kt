@@ -10,6 +10,7 @@ import androidx.media3.common.util.UnstableApi
 import com.deliveryapp.data.models.Usuario
 import com.deliveryapp.repository.UsuarioRepository
 import kotlinx.coroutines.launch
+import com.deliveryapp.data.SesionUsuario
 
 // Estados del resultado del login
 sealed class LoginResult {
@@ -30,7 +31,7 @@ class LoginViewModel(private val repository: UsuarioRepository) : ViewModel() {
 
             try {
                 val usuario = repository.login(username, password)
-                    Log.w("users", "${usuario}")
+                SesionUsuario.idUsuario = usuario.id
                 _loginResult.value = LoginResult.Success(usuario)
             } catch (e: Exception) {
                 _loginResult.value = LoginResult.Error("Login fallido: ${e.message}")
