@@ -86,8 +86,8 @@ class PedidoAdapter(
                     Log.w("Prueba", "llegue")
                     binding.btnAsignarse.visibility = View.VISIBLE
                     binding.btnAsignarse.setOnClickListener {
-                        onEstadoChange(pedido.id, "En camino") {
-                            pedido.estado = "En camino"
+                        onEstadoChange(pedido.id, "en camino") {
+                            pedido.estado = "en camino"
                             notifyItemChanged(position)
                         }
                     }
