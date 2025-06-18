@@ -6,49 +6,51 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.OptIn
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.deliveryapp.databinding.DialogLoginBinding // Importa el ViewBinding generado para dialog_login.xml
+import androidx.lifecycle.ViewModelProvider
+import androidx.media3.common.util.UnstableApi
+import com.deliveryapp.databinding.DialogLoginBinding
+import com.deliveryapp.data.api.RetrofitClient
+import com.deliveryapp.repository.UsuarioRepository
 import com.deliveryapp.viewmodel.LoginResult
 import com.deliveryapp.viewmodel.LoginViewModel
-import kotlin.text.isNotEmpty
-import kotlin.text.trim
+import com.deliveryapp.viewmodel.LoginViewModelFactory
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class LoginDialogFragment : DialogFragment() {
 
     private var _binding: DialogLoginBinding? = null
-    private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
+    private val binding get() = _binding!!
 
-    private val loginViewModel: LoginViewModel by viewModels() // Puedes compartir el ViewModel con la Activity si es necesario
+    private lateinit var loginViewModel: LoginViewModel
 
-    // Interfaz para comunicar el resultado a la Activity que lo llama
     interface LoginDialogListener {
         fun onLoginSuccess()
-        fun onLoginCancelled() // Opcional, si quieres manejar la cancelación del diálogo
+        fun onLoginCancelled()
     }
 
     private var listener: LoginDialogListener? = null
 
+    @OptIn(UnstableApi::class)
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DialogLoginBinding.inflate(LayoutInflater.from(context))
-
-        // No permitir cerrar el diálogo tocando fuera o con el botón atrás hasta que se loguee
         isCancelable = false
+
+        // Inicialización CORRECTA del ViewModel con factory
+        val repository = UsuarioRepository(RetrofitClient.apiService)
+        val factory = LoginViewModelFactory(repository)
+        loginViewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
 
         setupObservers()
         setupListeners()
 
         return MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)
-            // .setTitle("Iniciar Sesión") // Opcional, ya que lo tienes en el layout
-            // No agregamos botones aquí, ya que están en el layout del diálogo
             .create()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // El view ya se infló en onCreateDialog, pero DialogFragment requiere que se retorne aquí.
-        // Si no se usa MaterialAlertDialogBuilder, se inflaría aquí.
         return binding.root
     }
 
@@ -68,7 +70,7 @@ class LoginDialogFragment : DialogFragment() {
                     binding.buttonLoginDialog.isEnabled = true
                     Toast.makeText(context, "Login exitoso!", Toast.LENGTH_SHORT).show()
                     listener?.onLoginSuccess()
-                    dismiss() // Cierra el diálogo
+                    dismiss()
                 }
                 is LoginResult.Error -> {
                     binding.progressBarLoginDialog.visibility = View.GONE
@@ -94,7 +96,7 @@ class LoginDialogFragment : DialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null // Evitar memory leaks
+        _binding = null
     }
 
     companion object {

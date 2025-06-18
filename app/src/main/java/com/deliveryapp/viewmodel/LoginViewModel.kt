@@ -5,39 +5,30 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.deliveryapp.data.models.Usuario
-import kotlinx.coroutines.delay // Para simular una llamada de red
+import com.deliveryapp.repository.UsuarioRepository
 import kotlinx.coroutines.launch
 
-// Estado para el resultado del login
+// Estados del resultado del login
 sealed class LoginResult {
-    object Success : LoginResult()
+    data class Success(val usuario: Usuario) : LoginResult()
     data class Error(val message: String) : LoginResult()
     object Loading : LoginResult()
 }
 
-class LoginViewModel : ViewModel() { // Si usas un Repository, lo inyectarías aquí
+class LoginViewModel(private val repository: UsuarioRepository) : ViewModel() {
 
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
-    // Lista de usuarios hardcodeada para este ejemplo.
-    // En una app real, esto vendría de un AuthRepository/DataSource.
-    private val validUsers = listOf(
-        Usuario(1, "Juan", "test123"),
-        Usuario(2, "Pepe", "test123")
-    )
-
     fun login(username: String, password: String) {
         viewModelScope.launch {
-            _loginResult.value = LoginResult.Loading // Indicar que está cargando
+            _loginResult.value = LoginResult.Loading
 
-
-            val user = validUsers.find { it.username == username }
-
-            if (user != null && user.password == password) {
-                _loginResult.value = LoginResult.Success
-            } else {
-                _loginResult.value = LoginResult.Error("Usuario o contraseña incorrectos.")
+            try {
+                val usuario = repository.login(username, password)
+                _loginResult.value = LoginResult.Success(usuario)
+            } catch (e: Exception) {
+                _loginResult.value = LoginResult.Error("Login fallido: ${e.message}")
             }
         }
     }

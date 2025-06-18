@@ -1,13 +1,19 @@
 package com.deliveryapp.repository
+import android.util.Log
+import com.deliveryapp.data.api.ApiService
+import com.deliveryapp.data.api.RetrofitClient.apiService
 import com.deliveryapp.data.models.Usuario
 
-class UsuarioRepository(
+class UsuarioRepository(private val apiService: ApiService) {
 
-    private val usuariosDePrueba: List<Usuario> = listOf(
-        Usuario(id = 1, username = "Juan", password = "Test123"),
-        Usuario(id = 2, username = "Pedro", password = "Test123")
-    )
+    suspend fun login(username: String, password: String): Usuario {
+        return try {
+            val credentials = mapOf("username" to username, "password" to password)
+            apiService.login(credentials)
+        } catch (e: Exception) {
+            Log.e("UsuarioRepository", "Error durante login: ${e.message}", e)
+            throw e
+        }
+    }
 
-
-
-)
+}
