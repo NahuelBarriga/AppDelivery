@@ -18,7 +18,7 @@ class PedidoRepository {
     suspend fun obtenerPedidosDesdeApi(): List<Pedido> {
         Log.w("Pedidos", "llegue")
         try {
-            val response = api.obtenerPedidos(1)
+            val response = api.obtenerPedidos(SesionUsuario.idUsuario)
             if (response.isSuccessful) {
                 Log.w("Pedidos", "llegue2")
                 Log.w("Pedidos", "OK: ${response.body()}")
