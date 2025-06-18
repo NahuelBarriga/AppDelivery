@@ -11,8 +11,9 @@ import retrofit2.http.Path
 import retrofit2.http.POST
 
 interface ApiService {
-    @GET("pedidos/delivery")
-    suspend fun obtenerPedidos(): Response<List<Pedido>>
+    @GET("pedidos/delivery/{id}")
+    suspend fun obtenerPedidos(
+        @Path("id") usuarioId: Int ): Response<List<Pedido>>
 
     @PATCH("pedidos/delivery/{id}")
     suspend fun actualizarPedido(
