@@ -67,6 +67,10 @@ class MainActivity : AppCompatActivity(), LoginDialogFragment.LoginDialogListene
             pedidoAdapter.actualizarLista(pedidosFiltrados)
         }
         pedidoViewModel.cargarPedidos()
+
+        binding.btnRefresh.setOnClickListener {
+            pedidoViewModel.cargarPedidos()
+        }
     }
 
     private fun blockAppContent() {
